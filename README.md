@@ -13,9 +13,8 @@
 
 # To run: 
 ```shell
-$ git clone --depth 1 https://github.com/rakivo/create
-$ cd create
-$ gcc -O3 -Wall -Wextra -Werror main.c gen.c -g -o create # checking if there's any warnings
+$ git clone --depth 1 https://github.com/rakivo/create && cd create
+$ make && make clean
 $ ./create test rs .
 ```
 ## Usage:

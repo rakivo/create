@@ -1,13 +1,7 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define FILE_NAME "rakivo"
-
-#define DIR_CAP     100
-#define FILE_CAP    115
-#define CONTENT_CAP 125
-#define CONTENTS_CAP 7
+#include "gen.h"
 
 const char* const CONTENTS[CONTENTS_CAP] = {
     "fn main() {\n    println!(\"hello, world\");\n}",
@@ -21,14 +15,14 @@ const char* const CONTENTS[CONTENTS_CAP] = {
 void gen_mod_(FILE** fptr, char dir[DIR_CAP], const char* extens, const int* idx) {
     char mod_file[FILE_CAP];
     char mod_content[CONTENT_CAP];
-    if (strcmp(extens, "rs")) {
+    if (strcmp(extens, "rs") == 0) {
         snprintf(mod_file, FILE_CAP, "%s/%s", dir, "Cargo.toml");
         snprintf(mod_content, CONTENT_CAP, 
             "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"./%s.rs\"", FILE_NAME, FILE_NAME, FILE_NAME);
 
         fprintf(stdout, "Creating %s.rs:\n%s\n\n", FILE_NAME, CONTENTS[*idx]);
         fprintf(stdout, "Creating Cargo.toml:\n%s\n", mod_content);
-    } else if (strcmp(extens, "go")) {
+    } else if (strcmp(extens, "go") == 0) {
         snprintf(mod_file, FILE_CAP, "%s/%s", dir, "go.mod");
         snprintf(mod_content, CONTENT_CAP, "module %s\n\ngo 1.22.0", FILE_NAME);
 

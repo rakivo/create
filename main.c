@@ -3,17 +3,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-#define FILE_NAME "rakivo"
+#include "gen.h"
 
-#define DIR_CAP     100
-#define FILE_CAP    115
-#define CONTENT_CAP 125
-
-void gen_(FILE** fptr, const char* extens, const int* idx); 
-void gen_mod_(FILE** fptr, char dir[DIR_CAP], const char* extens, const int* idx);
-
-#define LANG_CAP 4
-#define LANGS_N  7
 const char* const LANGS[LANGS_N] = { 
     "c", "rs", "cpp", "js", "go", "py", "lua"
 };
@@ -93,14 +84,14 @@ int main(int argc, char** argv) {
 
     const int lang_idx = lang_check(lang);
     if (lang_idx == -1) {
-        fprintf(stderr, "ERROR: invalid language: %s\nSupported languages:", lang);
+        fprintf(stderr, "ERROR: invalid language: %s\nSupported languages: ", lang);
         // pretty print
         for (size_t i = 0; i < LANGS_N; ++i) {
             fprintf(stderr, "%s", LANGS[i]);
             if (i < LANGS_N - 1) {
                 fprintf(stderr, ", ");
             } 
-        }
+        } fprintf(stdout, "\n");
         return 1;
     }
 
