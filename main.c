@@ -1,15 +1,17 @@
 #include <stdio.h> 
 #include <string.h>
 #include <sys/stat.h>
+#include <errno.h>  
+#include <unistd.h> 
 
 #define FILE_NAME "rakivo"
 
-#define FILE_CAP       110
+#define FILE_CAP       115
 #define DIR_CAP        100
 
 #define CONTENT_CAP    256
 
-#define LANG_CAP 3
+#define LANG_CAP 5
 #define LANGS_N  3
 const char* const LANGS[] =  { "c", "rs", "cpp" };
 
@@ -29,7 +31,7 @@ int is_dir_exists(const char* path) {
 }
 
 int create_dir_(const char* dir_path) {
-    if (mkdir(dir_path, 0777) == -1) {
+    if (mkdir(dir_path, 0777) == -1 && errno != EEXIST) {
         perror("ERROR");
         return 1;
     }
@@ -40,11 +42,10 @@ int create_dirs(const char* dir_path) {
     char curr_dir[DIR_CAP];
     snprintf(curr_dir, sizeof(curr_dir), "%s", dir_path);
     
-    size_t len = strlen(curr_dir);
-    if (curr_dir[len - 1] == '/') {
-        curr_dir[len - 1] = 0;
+    size_t n = strlen(curr_dir);
+    if (curr_dir[n - 1] == '/') {
+        curr_dir[n - 1] = 0;
     }
-
     for (char* p = curr_dir + 1; *p; p++) {
         if (*p == '/') {
             *p = 0;
@@ -79,10 +80,12 @@ void generate(FILE** fptr, char file[FILE_CAP], char dir[DIR_CAP], const int* id
 
         fclose(ftoml);
         break;
-    case 3:
-        fprintf(stdout, "Generating C++ project is not implemented yet");
+    case 2:
+        fprintf(*fptr, 
+                "#include <iostream>\n\nint main(void) {\n    std::cout << \"hello, world\" << std::endl;\n    return 0;\n}");
         break;
     default:
+        fprintf(stdout, "No case for such file: %s", file);
         break;
     } 
 }
