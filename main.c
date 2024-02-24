@@ -2,9 +2,6 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#include <errno.h>  
-#include <unistd.h>
-
 #define FILE_NAME "rakivo"
 
 #define FILE_CAP       110
@@ -24,6 +21,40 @@ int check(const char* lang) {
         }
     } 
     return -1;
+}
+
+int is_dir_exists(const char* path) {
+    struct stat info;
+    return stat(path, &info) == 0 && S_ISDIR(info.st_mode);
+}
+
+int create_dir_(const char* dir_path) {
+    if (mkdir(dir_path, 0777) == -1) {
+        perror("ERROR");
+        return 1;
+    }
+    return 0;
+}
+
+int create_dirs(const char* dir_path) {
+    char curr_dir[DIR_CAP];
+    snprintf(curr_dir, sizeof(curr_dir), "%s", dir_path);
+    
+    size_t len = strlen(curr_dir);
+    if (curr_dir[len - 1] == '/') {
+        curr_dir[len - 1] = 0;
+    }
+
+    for (char* p = curr_dir + 1; *p; p++) {
+        if (*p == '/') {
+            *p = 0;
+            create_dir_(curr_dir);
+            *p = '/';
+        }
+    }
+    create_dir_(curr_dir);
+
+    return 0;
 }
 
 void generate(FILE** fptr, char file[FILE_CAP], char dir[DIR_CAP], const int* idx) {
@@ -49,47 +80,17 @@ void generate(FILE** fptr, char file[FILE_CAP], char dir[DIR_CAP], const int* id
         fclose(ftoml);
         break;
     case 3:
-        fprintf(stdout, "Generate C++ project is not implemented yet");
+        fprintf(stdout, "Generating C++ project is not implemented yet");
         break;
     default:
         break;
     } 
 }
 
-int create_directory(const char* dir_path) {
-    if (mkdir(dir_path, 0777) == -1 && errno != EEXIST) {
-        perror("ERROR");
-        fprintf(stderr, "ERROR: Could not create directory %s\n", dir_path);
-        return 1;
-    }
-    return 0;
-}
-
-int create_directories(const char* dir_path) {
-    char tmp[DIR_CAP];
-    char* p = NULL;
-    size_t len;
-
-    snprintf(tmp, sizeof(tmp), "%s", dir_path);
-    len = strlen(tmp);
-    if (tmp[len - 1] == '/')
-        tmp[len - 1] = 0;
-
-    for (p = tmp + 1; *p; p++)
-        if (*p == '/') {
-            *p = 0;
-            create_directory(tmp);
-            *p = '/';
-        }
-    create_directory(tmp);
-
-    return 0;
-}
-
 int main(int argc, char** argv) {
     if (argc < 4) {
         fprintf(stderr, "usage: create <dir_name> <language> <dir_path>\n");
-        fprintf(stderr, "for instance: create test c .\n");
+        fprintf(stderr, "for instance: create test rs .\n");
         return 1;
     } 
 
@@ -97,7 +98,7 @@ int main(int argc, char** argv) {
     strcpy(lang, argv[2]);
 
     const int lang_idx = check(lang);
-    if (lang_idx == -1 && errno != EEXIST) {
+    if (lang_idx == -1) {
         perror("ERROR");
         fprintf(stderr, "ERROR: invalid language: %s\n", lang);
         return 1;
@@ -106,7 +107,8 @@ int main(int argc, char** argv) {
     char dir[DIR_CAP];
     snprintf(dir, DIR_CAP, "%s/%s/", argv[3], argv[1]);
     fprintf(stdout, "Creating directory %s..\n", dir);
-    if (create_directories(dir) != 0) {
+    if (is_dir_exists(dir) || create_dirs(dir) != 0) {
+        fprintf(stderr, "ERROR: Could not create directory or directory already exists\n");
         return 1;
     }
 

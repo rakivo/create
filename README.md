@@ -7,12 +7,19 @@
 
 ### In future i plan to add more and more languages.
 
+## Usage:
+```shell
+create <dir_name> <language> <dir_path>
+for instance: create test rs .
+```
+
 # To run: 
 ```shell
 $ git clone --depth 1 https://github.com/rakivo/create
 $ cd create
 $ gcc -O3 main.c -g -o create
-$ ./create c
+$ ./create test rs .
 ```
 
-#### After this manipulations you'll have a little test.c file in your current directory, containing code to print "hello, world" to your shell
+### After this manipulations you'll have a little test.c file in your current directory, containing code to print "hello, world" to your shell
+#### The goal of this project is to create a lightweight tool for generating projects that is fast and convenient to use, avoiding the slowness found in many modern tools.
