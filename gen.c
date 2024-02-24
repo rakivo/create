@@ -1,11 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
-
 #include "gen.h"
 
 const char* const CONTENTS[CONTENTS_CAP] = {
-    "fn main() {\n    println!(\"hello, world\");\n}",
     "#include <stdio.h>\n\nint main(void) {\n    printf(\"hello, world\\n\");\n    return 0;\n}",
+    "fn main() {\n    println!(\"hello, world\");\n}",
     "#include <iostream>\n\nint main(void) {\n    std::cout << \"hello, world\" << std::endl;\n    return 0;\n}",
     "console.log(\"hello, world\");",
     "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"hello, world\")\n}",
