@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
 #include "gen.h"
 
 const char* const CONTENTS[CONTENTS_CAP] = {
@@ -39,11 +37,7 @@ void gen_mod_(FILE** fptr, char dir[DIR_CAP], const char* extens, const int* idx
 }
 
 void gen_(FILE** fptr, const char* extens, const int* idx) {
-    if (*idx == 5 || *idx == 6) {
-        fprintf(stdout, "Creating %s.%s:\n%s\n", FILE_NAME, extens, CONTENTS[5]);
-        fputs(CONTENTS[5], *fptr);
-        return;
-    } 
-    fprintf(stdout, "Creating %s.%s:\n%s\n", FILE_NAME, extens, CONTENTS[*idx]);
-    fputs(CONTENTS[*idx], *fptr);
+    const int trully_index = (*idx == 5 || *idx == 6) ? 5 : *idx;
+    fprintf(stdout, "Creating %s.%s:\n%s\n", FILE_NAME, extens, CONTENTS[trully_index]);
+    fputs(CONTENTS[trully_index], *fptr);
 }
