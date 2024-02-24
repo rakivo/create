@@ -1,6 +1,3 @@
-#ifndef GEN_H
-#define GEN_H
-
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -10,22 +7,22 @@
 
 #define DIR_CAP     100
 #define FILE_CAP    115
-#define CONTENT_CAP 256
+#define CONTENT_CAP 125
 
 void rsgen_(FILE** fptr, char dir[DIR_CAP]);
 void cgen_(FILE** fptr);
 void cppgen_(FILE** fptr);
 void jsgen_(FILE** fptr);
+void gogen_(FILE** fptr, char dir[DIR_CAP]);
+void gen_(FILE** fptr, const int* lang); 
 
-#endif // GEN_H
-
-#define LANG_CAP 5
-#define LANGS_N  3
-const char* const LANGS[] = { 
-    "c", "rs", "cpp", "js"
+#define LANG_CAP 4
+#define LANGS_N  7
+const char* const LANGS[LANGS_N] = { 
+    "c", "rs", "cpp", "js", "go", "py", "lua"
 };
 
-// linear check not so bad in this case don't sweat it CS graduates
+// don't sweat it CS graduates linear search in 5 elements array not that bad
 int lang_check(const char* lang) {
     for (size_t i = 0; i < LANGS_N; ++i) {
         if (strcmp(LANGS[i], lang) == 0) {
@@ -82,6 +79,13 @@ void generate(FILE** fptr, char file[FILE_CAP], char dir[DIR_CAP], const int* id
         break;
     case 3: 
         jsgen_(fptr);
+        break;
+    case 4: 
+        gogen_(fptr, dir);
+        break;
+    case 5:
+    case 6:
+        gen_(fptr, idx);
         break;
     default:
         fprintf(stdout, "No case for such file: %s", file);

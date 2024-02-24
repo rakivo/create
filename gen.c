@@ -1,20 +1,10 @@
-#ifndef GEN_H
-#define GEN_H
-
 #include <stdio.h>
 
 #define FILE_NAME "rakivo"
 
 #define DIR_CAP     100
 #define FILE_CAP    115
-#define CONTENT_CAP 256
-
-void rsgen_(FILE** fptr, char dir[DIR_CAP]);
-void cgen_(FILE** fptr);
-void cppgen_(FILE** fptr);
-void jsgen_(FILE** fptr);
-
-#endif // GEN_H
+#define CONTENT_CAP 125
 
 void rsgen_(FILE** fptr, char dir[DIR_CAP]) {
     char* content = "fn main() {\n    println!(\"hello, world\");\n}";
@@ -52,3 +42,27 @@ void jsgen_(FILE** fptr) {
     fputs(content, *fptr);
 }
 
+void gogen_(FILE** fptr, char dir[DIR_CAP]) {
+    char* content = "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"hello, world\")\n}";
+
+    char gomod_file[FILE_CAP];
+    char gomod_content[CONTENT_CAP];
+    snprintf(gomod_file, FILE_CAP, "%s/%s", dir, "go.mod");
+    snprintf(gomod_content, CONTENT_CAP, "module %s\n\ngo 1.22.0", FILE_NAME);
+
+    fprintf(stdout, "Creating %s.go:\n%s\n\n", FILE_NAME, content);
+    fprintf(stdout, "Creating go.mod:\n%s\n", gomod_content);
+    FILE* fgomod = fopen(gomod_file, "w");
+
+    fputs(content, *fptr);
+    fputs(gomod_content, fgomod);
+
+    fclose(fgomod);
+}
+
+void gen_(FILE** fptr, const int* lang) {
+    char* content = "print(\"hello, world\");";
+    char* extens  = *lang == 5 ? "py" : "lua";
+    fprintf(stdout, "Creating %s.%s:\n%s\n", FILE_NAME, extens, content);
+    fputs(content, *fptr);
+}
