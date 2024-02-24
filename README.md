@@ -15,7 +15,7 @@
 ```shell
 $ git clone --depth 1 https://github.com/rakivo/create
 $ cd create
-$ gcc -O3 main.c -g -o create
+$ gcc -O3 -Wall -Wextra -Werror main.c gen.c -g -o create # checking if there's any warnings
 $ ./create test rs .
 ```
 ## Usage:

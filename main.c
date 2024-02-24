@@ -9,12 +9,8 @@
 #define FILE_CAP    115
 #define CONTENT_CAP 125
 
-void rsgen_(FILE** fptr, char dir[DIR_CAP]);
-void cgen_(FILE** fptr);
-void cppgen_(FILE** fptr);
-void jsgen_(FILE** fptr);
-void gogen_(FILE** fptr, char dir[DIR_CAP]);
-void gen_(FILE** fptr, const int* lang); 
+void gen_(FILE** fptr, const char* extens, const int* idx); 
+void gen_mod_(FILE** fptr, char dir[DIR_CAP], const char* extens, const int* idx);
 
 #define LANG_CAP 4
 #define LANGS_N  7
@@ -68,24 +64,16 @@ int create_dirs(const char* dir_path) {
 // generates sample project that prints "hello, world"
 void generate(FILE** fptr, char file[FILE_CAP], char dir[DIR_CAP], const int* idx) {
     switch (*idx) {
-    case 0:
-        cgen_(fptr);
-        break;
     case 1: 
-        rsgen_(fptr, dir);
-        break;
-    case 2:
-        cppgen_(fptr);
-        break;
-    case 3: 
-        jsgen_(fptr);
-        break;
     case 4: 
-        gogen_(fptr, dir);
+        gen_mod_(fptr, dir, LANGS[*idx], idx);
         break;
+    case 0:
+    case 2:
+    case 3:
     case 5:
     case 6:
-        gen_(fptr, idx);
+        gen_(fptr, LANGS[*idx], idx);
         break;
     default:
         fprintf(stdout, "No case for such file: %s", file);
@@ -105,7 +93,6 @@ int main(int argc, char** argv) {
 
     const int lang_idx = lang_check(lang);
     if (lang_idx == -1) {
-        perror("ERROR");
         fprintf(stderr, "ERROR: invalid language: %s\nSupported languages:", lang);
         // pretty print
         for (size_t i = 0; i < LANGS_N; ++i) {
