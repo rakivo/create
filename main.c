@@ -2,18 +2,19 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <errno.h>  
-#include <unistd.h> 
 
 #define FILE_NAME "rakivo"
 
-#define FILE_CAP       115
-#define DIR_CAP        100
+#define FILE_CAP    115
+#define DIR_CAP     100
 
-#define CONTENT_CAP    256
+#define CONTENT_CAP 256
 
 #define LANG_CAP 5
 #define LANGS_N  3
-const char* const LANGS[] =  { "c", "rs", "cpp" };
+const char* const LANGS[] = { 
+    "c", "rs", "cpp" 
+};
 
 // linear check not so bad in this case don't sweat it
 int check(const char* lang) {
@@ -40,7 +41,7 @@ int create_dir_(const char* dir_path) {
 
 int create_dirs(const char* dir_path) {
     char curr_dir[DIR_CAP];
-    snprintf(curr_dir, sizeof(curr_dir), "%s", dir_path);
+    snprintf(curr_dir, DIR_CAP, "%s", dir_path);
     
     size_t n = strlen(curr_dir);
     if (curr_dir[n - 1] == '/') {
@@ -58,31 +59,47 @@ int create_dirs(const char* dir_path) {
     return 0;
 }
 
+void rsgen_(FILE** fptr, char dir[DIR_CAP]) {
+    char* content = "fn main() {\n    println!(\"hello, world\");\n}";
+
+    char toml_file[FILE_CAP];
+    char toml_content[CONTENT_CAP];
+    snprintf(toml_file, FILE_CAP, "%s/%s", dir, "Cargo.toml");
+    snprintf(toml_content, CONTENT_CAP, "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"./%s.rs\"", FILE_NAME, FILE_NAME, FILE_NAME);
+
+    fprintf(stdout, "Creating %s.rs:\n%s\n\n", FILE_NAME, content);
+    fprintf(stdout, "Creating Cargo.toml:\n%s\n", toml_content);
+    FILE* ftoml = fopen(toml_file, "w");
+
+    fputs(content, *fptr);
+    fputs(toml_content, ftoml);
+
+    fclose(ftoml);
+}
+
+void cgen_(FILE** fptr, char dir[DIR_CAP]) {
+    char* content = "#include <stdio.h>\n\nint main(void) {\n    printf(\"hello, world\\n\");\n    return 0;\n}";
+    fprintf(stdout, "Creating %s.c:\n%s\n", FILE_NAME, content);
+    fputs(content, *fptr);
+}
+
+void cppgen_(FILE** fptr, char dir[DIR_CAP]) {
+    char* content = "#include <iostream>\n\nint main(void) {\n    std::cout << \"hello, world\" << std::endl;\n    return 0;\n}";
+    fprintf(stdout, "Creating %s.cpp:\n%s\n", FILE_NAME, content);
+    fputs(content, *fptr);
+}
+
+// generates sample project that prints "hello, world"
 void generate(FILE** fptr, char file[FILE_CAP], char dir[DIR_CAP], const int* idx) {
     switch (*idx) {
     case 0:
-        fprintf(*fptr, 
-                "#include <stdio.h>\n\nint main(void) {\n    printf(\"hello, world\\n\");\n    return 0;\n}");
+        cgen_(fptr, dir);
         break;
     case 1: 
-        fprintf(*fptr, 
-                "fn main() {\n    println!(\"hello, world\");\n}");
-
-        char toml_file[FILE_CAP];
-        char content[CONTENT_CAP];
-        snprintf(toml_file, FILE_CAP, "%s/%s", dir, "Cargo.toml");
-        snprintf(content, CONTENT_CAP, "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"./%s.rs\"",
-                 FILE_NAME, FILE_NAME, FILE_NAME);
-        fprintf(stdout, "Creating Cargo.toml:\n%s..\n", content);
-
-        FILE* ftoml = fopen(toml_file, "w");
-        fputs(content, ftoml);
-
-        fclose(ftoml);
+        rsgen_(fptr, dir);
         break;
     case 2:
-        fprintf(*fptr, 
-                "#include <iostream>\n\nint main(void) {\n    std::cout << \"hello, world\" << std::endl;\n    return 0;\n}");
+        cppgen_(fptr, dir);
         break;
     default:
         fprintf(stdout, "No case for such file: %s", file);
