@@ -25,8 +25,8 @@ for instance: ```./create test rs .```
 
 ### After present manipulations you can test that: 
 ```shell
-cd test
-cargo run
+$ cd test
+$ cargo run
 ```
 
 #### The goal of this project is to create a lightweight tool for generating projects that is fast and convenient to use, avoiding the slowness found in many modern tools.
