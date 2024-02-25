@@ -35,9 +35,9 @@ static void generate(FILE** fptr, const char* file_name, char file[FILE_CAP], ch
 }
 
 int main(int argc, char** argv) {
-    if (argc < 4) {
+    if (argc < 5) {
         fprintf(stderr, "usage: create <name> <language> <dir_name> <dir_path>\n");
-        fprintf(stderr, "for instance: create test rs .\n");
+        fprintf(stderr, "for instance: create hello rs test .\n");
         return 1;
     } 
 
