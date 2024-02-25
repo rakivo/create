@@ -16,12 +16,12 @@
 # To run: 
 ```shell
 $ git clone --depth 1 https://github.com/rakivo/create && cd create
-$ make && make clean
-$ ./create test rs .
+$ make
+$ ./create hello rs test .
 ```
 ## Usage:
-```./create <dir_name> <language> <dir_path>```
-for instance: ```./create test rs .```
+```./create create <name> <language> <dir_name> <dir_path>```
+for instance: ```./create hello rs test .```
 
 ### After present manipulations you can test that: 
 ```shell

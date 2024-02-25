@@ -10,7 +10,7 @@ TARGET = create
 
 .PHONY: all clean
 
-all: $(TARGET)
+all: $(TARGET) clean 
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@
@@ -18,5 +18,5 @@ $(TARGET): $(OBJS)
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-clean obj:
+clean:
 	rm -f $(BUILD_DIR)/*.o 
