@@ -14,12 +14,9 @@
 #define LANGS_LEN 7
 extern const char* const LANGS[LANGS_LEN];
 
-static const int lang_check(const char* lang);
-static void generate(FILE** fptr, const char* file_name, char file[FILE_CAP], char dir[DIR_CAP], const int* const idx);
-
-const int is_dir_exists(const char* dir_path);
-const int create_dir_(const char* dir_path);
-const int create_dirs(const char* dir_path);
+int is_dir_exists(const char* dir_path);
+int create_dir_(const char* dir_path);
+int create_dirs(const char* dir_path);
 
 void gen_(FILE** fptr, const char* file_name, const char* extens, const int* const idx);
 void gen_mod_(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx);

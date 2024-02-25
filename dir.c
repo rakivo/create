@@ -3,12 +3,12 @@
 
 #include "gen.h"
 
-const int is_dir_exists(const char* dir_path) {
+int is_dir_exists(const char* dir_path) {
     struct stat info;
     return stat(dir_path, &info) == 0 && S_ISDIR(info.st_mode);
 }
 
-const int create_dir_(const char* dir_path) {
+int create_dir_(const char* dir_path) {
     if (mkdir(dir_path, 0777) == -1 && errno != EEXIST) {
         perror("ERROR");
         return 1;
@@ -16,7 +16,7 @@ const int create_dir_(const char* dir_path) {
     return 0;
 }
 
-const int create_dirs(const char* dir_path) {
+int create_dirs(const char* dir_path) {
     char curr_dir[DIR_CAP];
     snprintf(curr_dir, DIR_CAP, "%s", dir_path);
     

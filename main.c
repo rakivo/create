@@ -5,7 +5,7 @@ const char* const LANGS[LANGS_LEN] = {
 };
 
 // don't sweat it CS graduates linear search in 5 elements array not that bad
-static const int lang_check(const char* lang) {
+static int lang_check(const char* lang) {
     for (size_t i = 0; i < LANGS_LEN; ++i) {
         if (strcmp(LANGS[i], lang) == 0) {
             return i;
