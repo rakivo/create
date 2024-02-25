@@ -11,6 +11,8 @@
 
 ### In future i plan to add more and more languages.
 
+![PREVIEW](PREVIEW.gif)
+
 # To run: 
 ```shell
 $ git clone --depth 1 https://github.com/rakivo/create && cd create
