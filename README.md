@@ -21,7 +21,12 @@ $ ./create test rs .
 ```
 ## Usage:
 ```./create <dir_name> <language> <dir_path>```
-for instance: ```create test rs .```
+for instance: ```./create test rs .```
 
-### After this manipulations you'll have a little test.c file in your <dir_name> directory, containing code to print "hello, world" to your shell
+### After present manipulations you can test that: 
+```shell
+cd test
+cargo run
+```
+
 #### The goal of this project is to create a lightweight tool for generating projects that is fast and convenient to use, avoiding the slowness found in many modern tools.
