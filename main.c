@@ -1,12 +1,12 @@
 #include "gen.h"
 
-const char* const LANGS[LANGS_LEN] = { 
+const char* const LANGS[LANGS_CAP] = { 
     "c", "rs", "cpp", "js", "go", "py", "lua"
 };
 
 // don't sweat it CS graduates linear search in 5 elements array not that bad
 static int lang_check(const char* lang) {
-    for (size_t i = 0; i < LANGS_LEN; ++i) {
+    for (size_t i = 0; i < LANGS_CAP; ++i) {
         if (strcmp(LANGS[i], lang) == 0) {
             return i;
         }
@@ -41,15 +41,12 @@ int main(int argc, char** argv) {
         return 1;
     } 
 
-    char lang [LANG_CAP];
-    strcpy(lang, argv[2]);
-
-    const int lang_idx = lang_check(lang);
+    const int lang_idx = lang_check(argv[2]);
     if (lang_idx == -1) {
-        fprintf(stderr, "ERROR: invalid language: %s\nSupported languages: ", lang);
-        for (size_t i = 0; i < LANGS_LEN; ++i) {
+        fprintf(stderr, "ERROR: invalid language: %s\nSupported languages: ", argv[2]);
+        for (size_t i = 0; i < LANGS_CAP; ++i) {
             fprintf(stderr, "%s", LANGS[i]);
-            if (i < LANGS_LEN - 1) {
+            if (i < LANGS_CAP - 1) {
                 fprintf(stderr, ", ");
             } 
         } fprintf(stdout, "\n");
@@ -66,7 +63,7 @@ int main(int argc, char** argv) {
 
     char file[FILE_CAP];
     // add '/' only if it is not already present at the end
-    snprintf(file, FILE_CAP, "%s%s%s.%s", dir, (dir[strlen(dir) - 1] == '/') ? "" : "/", argv[1], lang);
+    snprintf(file, FILE_CAP, "%s%s%s.%s", dir, (dir[strlen(dir) - 1] == '/') ? "" : "/", argv[1], argv[2]);
     fprintf(stdout, "Creating file %s..\n", file);
 
     FILE* fptr = fopen(file, "w");

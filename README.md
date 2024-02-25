@@ -19,6 +19,12 @@ $ git clone --depth 1 https://github.com/rakivo/create && cd create
 $ make
 $ ./create hello rs test .
 ```
+
+## To add the binary to your PATH variables:
+```shell
+$ ./addtopath.sh
+``` 
+
 ## Usage:
 ```./create create <name> <language> <dir_name> <dir_path>```
 for instance: ```./create hello rs test .```
