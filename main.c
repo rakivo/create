@@ -14,6 +14,20 @@ static int lang_check(const char* lang) {
     return -1;
 }
 
+#define LANG_NAME_CONFLICT(lang, file_name) fprintf(stderr, "lang: %s, and name: %s is a conflicts\n", lang, file_name);
+
+static int check_conficts(const char* file_name, const char* lang, char dir[DIR_CAP]) {
+    (void) dir;
+    if (strcmp(lang, "rust") == 0 && strcmp(file_name, "test") == 0) {
+        LANG_NAME_CONFLICT(lang, file_name);
+        return 1;
+    } else if (strcmp(lang, "go") == 0 && strcmp(file_name, "go") == 0) {
+        LANG_NAME_CONFLICT(lang, file_name);
+        return 1;
+    }
+    return 0;
+}
+
 // generates sample project that prints "hello, world"
 static void generate(FILE** fptr, const char* file_name, char file[FILE_CAP], char dir[DIR_CAP], const int* const idx) {
     switch (*idx) {
@@ -55,6 +69,9 @@ int main(int argc, char** argv) {
 
     char dir[DIR_CAP];
     snprintf(dir, DIR_CAP, "%s/%s/", argv[3], argv[4]);
+    if (check_conficts(argv[1], argv[2], argv[3]) != 0) {
+        return 1;
+    }
     fprintf(stdout, "Creating directory %s..\n", dir);
     if (is_dir_exists(dir) || create_dirs(dir) != 0) {
         fprintf(stderr, "ERROR: Could not create directory or directory already exists\n");

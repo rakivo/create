@@ -1,3 +1,5 @@
+#include <stdarg.h>
+
 #include "gen.h"
 
 const char* const CONTENTS[CONTENTS_CAP] = {
@@ -9,26 +11,33 @@ const char* const CONTENTS[CONTENTS_CAP] = {
     "print(\"hello, world\");",
 };
 
+#define TOML_MOD_CONTENT "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"./%s.rs\""
+#define GO_MOD_CONTENT   "module %s\n\ngo 1.22.0"
+
+#define SET_MOD(file, dir, content) snprintf(file, FILE_CAP, "%s/%s", dir, content)
+#define SET_MOD_CONTENT(mod_file, file_name, sample, ...) do { \
+        _Pragma("GCC diagnostic ignored \"-Wformat-extra-args\"") \
+        _Pragma("GCC diagnostic ignored \"-Wunused-value\"") \
+        snprintf(mod_file, FILE_CAP, sample, file_name, ##__VA_ARGS__); \
+    } while (0)
+#define CREATING(file_name, extens, content) fprintf(stdout, "Creating %s.%s:\n%s\n\n", file_name, extens, content);
+
 void gen_mod_(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx) {
     char mod_file[FILE_CAP];
     char mod_content[CONTENT_CAP];
     if (strcmp(extens, "rs") == 0) {
-        snprintf(mod_file, FILE_CAP, "%s/%s", dir, "Cargo.toml");
-        snprintf(mod_content, CONTENT_CAP, 
-            "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"./%s.rs\"", file_name, file_name, file_name);
-
-        fprintf(stdout, "Creating %s.rs:\n%s\n\n", file_name, CONTENTS[*idx]);
-        fprintf(stdout, "Creating Cargo.toml:\n%s\n", mod_content);
+        SET_MOD(mod_file, dir, "Cargo.toml");
+        SET_MOD_CONTENT(mod_content, file_name, TOML_MOD_CONTENT, file_name, file_name, file_name);
+        CREATING("Cargo", "toml", mod_content);
     } else if (strcmp(extens, "go") == 0) {
-        snprintf(mod_file, FILE_CAP, "%s/%s", dir, "go.mod");
-        snprintf(mod_content, CONTENT_CAP, "module %s\n\ngo 1.22.0", file_name);
-
-        fprintf(stdout, "Creating %s.go:\n%s\n\n", file_name, CONTENTS[*idx]);
-        fprintf(stdout, "Creating go.mod:\n%s\n", mod_content);
+        SET_MOD(mod_file, dir, "go.mod");
+        SET_MOD_CONTENT(mod_content, file_name, GO_MOD_CONTENT, file_name);
+        CREATING("go", "mod", mod_content);
     } else {
         fprintf(stdout, "ERROR: Unknown language extension: %s in directory: %s\n", extens, dir);
         exit(1);
     }
+    CREATING(file_name, extens, CONTENTS[*idx]);
     FILE* fmod = fopen(mod_file, "w");
 
     fputs(CONTENTS[*idx], *fptr);
