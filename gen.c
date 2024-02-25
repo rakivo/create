@@ -9,7 +9,7 @@ const char* const CONTENTS[CONTENTS_CAP] = {
     "print(\"hello, world\");",
 };
 
-void gen_mod_(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* idx) {
+void gen_mod_(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx) {
     char mod_file[FILE_CAP];
     char mod_content[CONTENT_CAP];
     if (strcmp(extens, "rs") == 0) {
@@ -36,7 +36,7 @@ void gen_mod_(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char*
     fclose(fmod);
 }
 
-void gen_(FILE** fptr, const char* file_name, const char* extens, const int* idx) {
+void gen_(FILE** fptr, const char* file_name, const char* extens, const int* const idx) {
     const int trully_index = (*idx == 5 || *idx == 6) ? 5 : *idx;
     fprintf(stdout, "Creating %s.%s:\n%s\n", file_name, extens, CONTENTS[trully_index]);
     fputs(CONTENTS[trully_index], *fptr);

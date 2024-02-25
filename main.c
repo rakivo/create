@@ -1,6 +1,3 @@
-#include <sys/stat.h>
-#include <errno.h>
-
 #include "gen.h"
 
 const char* const LANGS[LANGS_LEN] = { 
@@ -8,7 +5,7 @@ const char* const LANGS[LANGS_LEN] = {
 };
 
 // don't sweat it CS graduates linear search in 5 elements array not that bad
-int lang_check(const char* lang) {
+static const int lang_check(const char* lang) {
     for (size_t i = 0; i < LANGS_LEN; ++i) {
         if (strcmp(LANGS[i], lang) == 0) {
             return i;
@@ -17,41 +14,8 @@ int lang_check(const char* lang) {
     return -1;
 }
 
-int is_dir_exists(const char* dir_path) {
-    struct stat info;
-    return stat(dir_path, &info) == 0 && S_ISDIR(info.st_mode);
-}
-
-int create_dir_(const char* dir_path) {
-    if (mkdir(dir_path, 0777) == -1 && errno != EEXIST) {
-        perror("ERROR");
-        return 1;
-    }
-    return 0;
-}
-
-int create_dirs(const char* dir_path) {
-    char curr_dir[DIR_CAP];
-    snprintf(curr_dir, DIR_CAP, "%s", dir_path);
-    
-    size_t n = strlen(curr_dir);
-    if (curr_dir[n - 1] == '/') {
-        curr_dir[n - 1] = 0;
-    }
-    for (char* p = curr_dir + 1; *p; p++) {
-        if (*p == '/') {
-            *p = 0;
-            create_dir_(curr_dir);
-            *p = '/';
-        }
-    }
-    create_dir_(curr_dir);
-
-    return 0;
-}
-
 // generates sample project that prints "hello, world"
-void generate(FILE** fptr, const char* file_name, char file[FILE_CAP], char dir[DIR_CAP], const int* idx) {
+static void generate(FILE** fptr, const char* file_name, char file[FILE_CAP], char dir[DIR_CAP], const int* const idx) {
     switch (*idx) {
     case 1: 
     case 4: 
@@ -77,7 +41,7 @@ int main(int argc, char** argv) {
         return 1;
     } 
 
-    char lang[LANG_CAP];
+    char lang [LANG_CAP];
     strcpy(lang, argv[2]);
 
     const int lang_idx = lang_check(lang);
