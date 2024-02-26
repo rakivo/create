@@ -1,7 +1,7 @@
 #include "gen.h"
 
-const char* const LANGS[LANGS_CAP] = { 
-    "c", "rs", "cpp", "js", "go", "py", "lua"
+const char* const LANGS[LANGS_CAP] = {
+    "c", "rs", "cpp", "js", "go", "php", "pas", "py", "lua"
 };
 
 // don't sweat it CS graduates linear search in 5 elements array not that bad
@@ -10,7 +10,7 @@ static int lang_check(const char* lang) {
         if (strcmp(LANGS[i], lang) == 0) {
             return i;
         }
-    } 
+    }
     return -1;
 }
 
@@ -31,8 +31,8 @@ static int check_conficts(const char* file_name, const char* lang, char dir[DIR_
 // generates sample project that prints "hello, world"
 static void generate(FILE** fptr, const char* file_name, char file[FILE_CAP], char dir[DIR_CAP], const int* const idx) {
     switch (*idx) {
-    case 1: 
-    case 4: 
+    case 1:
+    case 4:
         gen_mod_(fptr, file_name, dir, LANGS[*idx], idx);
         break;
     case 0:
@@ -40,12 +40,15 @@ static void generate(FILE** fptr, const char* file_name, char file[FILE_CAP], ch
     case 3:
     case 5:
     case 6:
+    case 7:
+    case 8:
         gen_(fptr, file_name, LANGS[*idx], idx);
         break;
     default:
-        fprintf(stdout, "No case for such file: %s", file);
+        fprintf(stdout, "No case for such file: %s\n", file);
+        exit(1);
         break;
-    } 
+    }
 }
 
 int main(int argc, char** argv) {
@@ -53,7 +56,7 @@ int main(int argc, char** argv) {
         fprintf(stderr, "usage: create <name> <language> <dir_name> <dir_path>\n");
         fprintf(stderr, "for instance: create hello rs test .\n");
         return 1;
-    } 
+    }
 
     const int lang_idx = lang_check(argv[2]);
     if (lang_idx == -1) {
@@ -62,7 +65,7 @@ int main(int argc, char** argv) {
             fprintf(stderr, "%s", LANGS[i]);
             if (i < LANGS_CAP - 1) {
                 fprintf(stderr, ", ");
-            } 
+            }
         } fprintf(stdout, "\n");
         return 1;
     }

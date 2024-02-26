@@ -1,18 +1,18 @@
-#include <stdarg.h>
-
 #include "gen.h"
 
 const char* const CONTENTS[CONTENTS_CAP] = {
     "#include <stdio.h>\n\nint main(void) {\n    printf(\"hello, world\\n\");\n    return 0;\n}",
     "fn main() {\n    println!(\"hello, world\");\n}",
-    "#include <iostream>\n\nint main(void) {\n    std::cout << \"hello, world\" << std::endl;\n    return 0;\n}",
+    "#include <iostream>\n\nint main(void) {\n    std::cout << }y>}nn\"hello, world\" << std::endl;\n    return 0;\n}",
     "console.log(\"hello, world\");",
     "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"hello, world\")\n}",
-    "print(\"hello, world\");",
+    "<?php\necho \"hello, world\";\n?>", 
+    "program hello;\nbegin\n    writeln('hello, world');\nend.", 
+    "print(\"hello, world\");" 
 };
 
 #define TOML_MOD_CONTENT "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"./%s.rs\""
-#define GO_MOD_CONTENT   "module %s\n\ngo 1.22.0"
+#define GO_MOD_CONTENT  "module %s\n\ngo 1.22.0"
 
 #define SET_MOD(file, dir, content) snprintf(file, FILE_CAP, "%s/%s", dir, content)
 #define SET_MOD_CONTENT(mod_file, file_name, sample, ...) do { \
@@ -46,7 +46,7 @@ void gen_mod_(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char*
 }
 
 void gen_(FILE** fptr, const char* file_name, const char* extens, const int* const idx) {
-    const int trully_index = (*idx == 5 || *idx == 6) ? 5 : *idx;
-    fprintf(stdout, "Creating %s.%s:\n%s\n", file_name, extens, CONTENTS[trully_index]);
+    const int trully_index = *idx > 6 ? 7 : *idx;
+    CREATING(file_name, extens, CONTENTS[trully_index]);
     fputs(CONTENTS[trully_index], *fptr);
 }

@@ -19,7 +19,7 @@ int create_dir_(const char* dir_path) {
 int create_dirs(const char* dir_path) {
     char curr_dir[DIR_CAP];
     snprintf(curr_dir, DIR_CAP, "%s", dir_path);
-    
+
     size_t n = strlen(curr_dir);
     if (curr_dir[n - 1] == '/') {
         curr_dir[n - 1] = 0;
