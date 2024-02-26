@@ -8,6 +8,7 @@
 - [Go](https://en.wikipedia.org/wiki/Go_(programming_language)) (go)
 - [Php](https://en.wikipedia.org/wiki/PHP) (php)
 - [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) (pas)
+- [Kotlin](https://en.wikipedia.org/wiki/Kotlin_(programming_language)) (kt)
 - [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) (py)
 - [Lua](https://en.wikipedia.org/wiki/Lua_(programming_language)) (lua)
 
@@ -15,7 +16,7 @@
 
 ![PREVIEW](PREVIEW.gif)
 
-# To run: 
+# To run:
 ```shell
 $ git clone --depth 1 https://github.com/rakivo/create && cd create
 $ make
@@ -25,13 +26,13 @@ $ ./create hello rs test .
 ## To add the binary to your PATH variables:
 ```shell
 $ ./addtopath.sh
-``` 
+```
 
 ## Usage:
 ```./create create <name> <language> <dir_name> <dir_path>```
 for instance: ```./create hello rs test .```
 
-### After present manipulations you can test that: 
+### After present manipulations you can test that:
 ```shell
 $ cd test
 $ cargo run
