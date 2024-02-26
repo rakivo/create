@@ -6,6 +6,8 @@
 - [C++](https://en.wikipedia.org/wiki/C%2B%2B) (cpp)
 - [JS](https://en.wikipedia.org/wiki/JavaScript) (js)
 - [Go](https://en.wikipedia.org/wiki/Go_(programming_language)) (go)
+- [Php](https://en.wikipedia.org/wiki/PHP) (php)
+- [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) (pas)
 - [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) (py)
 - [Lua](https://en.wikipedia.org/wiki/Lua_(programming_language)) (lua)
 
