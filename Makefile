@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall -Wextra -pedantic -std=c99
-SRC_DIR = .
+SRC_DIR = ./src
 BUILD_DIR = .
 
 SRCS = $(wildcard $(SRC_DIR)/*.c)

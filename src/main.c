@@ -1,7 +1,7 @@
 #include "gen.h"
 
 const char* const LANGS[LANGS_CAP] = {
-    "c", "rs", "cpp", "js", "go", "php", "pas", "py", "lua"
+    "c", "rs", "cpp", "js", "go", "php", "pas", "kt", "py", "lua"
 };
 
 // don't sweat it CS graduates linear search in 5 elements array not that bad
@@ -42,6 +42,7 @@ static void generate(FILE** fptr, const char* file_name, char file[FILE_CAP], ch
     case 6:
     case 7:
     case 8:
+    case 9:
         gen_(fptr, file_name, LANGS[*idx], idx);
         break;
     default:

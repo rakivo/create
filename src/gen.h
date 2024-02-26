@@ -5,12 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DIR_CAP          128
-#define FILE_CAP         256
-#define CONTENT_CAP      256
-#define CONTENTS_CAP     8
-#define MOD_CONTENTS_CAP 2
-#define LANGS_CAP        9
+#define DIR_CAP      128
+#define FILE_CAP     256
+#define SAMPLE_CAP   256
+#define SAMPLES_CAP  9
+#define LANGS_CAP    10
 
 extern const char* const LANGS[LANGS_CAP];
 
