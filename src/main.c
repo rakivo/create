@@ -6,7 +6,6 @@
 } while(0)
 
 #define SHOW_SUPPORTED_LANGS(out) do { \
-    fprintf(stdout, "Supported languages: "); \
     for (size_t i = 0; i < LANGS_CAP; ++i) { \
         fprintf(out, "%s", LANGS[i]); \
         if (i < LANGS_CAP - 1) { \
@@ -39,32 +38,29 @@
     fprintf(stdout, "All set!\n"); \
     fprintf(stdout, "<======>\n");
 
+#define CHECK_CONFLICTS(ret, file_name, lang) do { \
+    if (strcmp(lang, "rs") == 0 && strcmp(file_name, "test") == 0) { \
+        LANG_NAME_CONFLICT(lang, file_name); \
+        ret = 1; \
+    } else if (strcmp(lang, "go") == 0 && strcmp(file_name, "go") == 0) { \
+        LANG_NAME_CONFLICT(lang, file_name); \
+        ret = 1; \
+    } \
+} while(0)
+
+// don't sweat it CS graduates linear search in 5 elements array not that bad
+#define LANG_CHECK(ret, lang) { \
+    for (size_t i = 0; i < LANGS_CAP; ++i) { \
+        if (strcmp(LANGS[i], lang) == 0) { \
+            ret = i; \
+        } \
+    } \
+}
+
 const char* const LANGS[LANGS_CAP] = {
 //   0     1     2      3     4     5      6      7     8     9
     "c", "rs", "cpp", "js", "go", "php", "pas", "kt", "py", "lua"
 };
-
-// don't sweat it CS graduates linear search in 5 elements array not that bad
-static int lang_check(const char* lang) {
-    for (size_t i = 0; i < LANGS_CAP; ++i) {
-        if (strcmp(LANGS[i], lang) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-static int check_conficts(const char* file_name, const char* lang, char dir[DIR_CAP]) {
-    (void) dir; // i let dir last maybe for future. ((void) it for have no warnings)
-    if (strcmp(lang, "rs") == 0 && strcmp(file_name, "test") == 0) {
-        LANG_NAME_CONFLICT(lang, file_name);
-        return 1;
-    } else if (strcmp(lang, "go") == 0 && strcmp(file_name, "go") == 0) {
-        LANG_NAME_CONFLICT(lang, file_name);
-        return 1;
-    }
-    return 0;
-}
 
 int main(int argc, char** argv) {
     if (argc >= 1 && argc < 5) {
@@ -77,7 +73,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    const int lang_idx = lang_check(argv[2]);
+    int lang_idx = -1; LANG_CHECK(lang_idx, argv[2]);
     if (lang_idx == -1) {
         fprintf(stderr, "ERROR: invalid language: %s\nSupported languages: ", argv[2]);
         SHOW_SUPPORTED_LANGS(stderr);
@@ -86,7 +82,9 @@ int main(int argc, char** argv) {
 
     char dir[DIR_CAP];
     snprintf(dir, DIR_CAP, "%s/%s/", argv[3], argv[4]);
-    if (check_conficts(argv[1], argv[2], argv[3]) != 0) return 1;
+
+    int is_conflict = 0; CHECK_CONFLICTS(is_conflict, argv[2], argv[3]);
+    if (is_conflict != 0) return 1;
     fprintf(stdout, "Creating directory %s..\n", dir);
 
     struct stat info;
@@ -109,7 +107,6 @@ int main(int argc, char** argv) {
     // add '/' only if it is not already present at the end
     snprintf(file, FILE_CAP, "%s%s%s.%s", dir, (dir[strlen(dir) - 1] == '/') ? "" : "/", argv[1], argv[2]);
     fprintf(stdout, "Creating file %s..\n", file);
-    fprintf(stdout, "\n\n\n\n\nFILE: %s \n\n", file);
 
     FILE* fptr = fopen(file, "w");
     if (fptr == NULL) {
