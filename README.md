@@ -10,8 +10,6 @@
 - [Python](https://en.wikipedia.org/wiki/Python_(programming_language))
 - [Lua](https://en.wikipedia.org/wiki/Lua_(programming_language))
 
-### In future i plan to add more and more languages.
-
 ![PREVIEW](PREVIEW.gif)
 
 # To run:
@@ -27,7 +25,7 @@ $ ./addtopath.sh
 ```
 
 ## Usage:
-```./create create <name> <language> <dir_name> <dir_path>```
+```./create create <file_name> <language> <dir_name> <dir_path>```
 for instance: ```./create hello rs test .```
 
 ### After that you can test that:
