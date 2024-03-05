@@ -3,10 +3,6 @@
 #define TOML_MOD_SAMPLE "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"%s.rs\""
 #define GO_MOD_SAMPLE   "module %s\n\ngo 1.22.0"
 
-#define CREATING(file_name, extens, content) \
-    fprintf(stdout, "<========================>\n"); \
-    fprintf(stdout, "Creating %s.%s:\n%s\n", file_name, extens, content); \
-
 #define SET_MOD(file, dir, content, src) \
     if (src == 1) snprintf(file, FILE_CAP, "%s/../%s", dir, content); \
     else snprintf(file, FILE_CAP, "%s/%s", dir, content);

@@ -1,42 +1,11 @@
 #include "gen.h"
 
-#define USAGE do { \
-    fprintf(stdout, "usage: create <name> <language> <dir_name> <dir_path>\n"); \
-    fprintf(stdout, "for instance: create hello rs test .\n"); \
-} while(0)
-
-#define SHOW_SUPPORTED_LANGS(out) do { \
-    for (size_t i = 0; i < LANGS_CAP; ++i) { \
-        fprintf(out, "%s", LANGS[i]); \
-        if (i < LANGS_CAP - 1) { \
-            fprintf(out, ", "); \
-        } \
-    } fprintf(out, "\n"); \
-} while(0)
-
-#define LANG_NAME_CONFLICT(lang, file_name) fprintf(stderr, "ERROR: lang: %s, and name: %s is a conflict\n", lang, file_name);
-
-#define GET_USER_INPUT(buf, ret) do { \
-    do { \
-        buf = getchar(); \
-        if ('A' <= buf && buf <= 'Z') buf = ('a' + (buf - 'A')); \
-        if (buf != 'y' && buf != 'n') fprintf(stdout, "enter y or n "); \
-    } while (buf != 'y' && buf != 'n'); \
-    if (buf == 'y') ret = 1; else ret = 0; \
-    while (getchar() != '\n'); \
-} while (0)
-
 #define CREATE_DIRS(dir, info, src) do { \
     if ((stat(dir, &info) == 0 && S_ISDIR(info.st_mode)) || create_dirs(dir, src) != 0) { \
         fprintf(stderr, "ERROR: Could not create directory or directory already exists\n"); \
         return 1; \
     } \
-} while(0)
-
-#define ALL_SET \
-    fprintf(stdout, "<======>\n"); \
-    fprintf(stdout, "All set!\n"); \
-    fprintf(stdout, "<======>\n");
+} while (0)
 
 #define CHECK_CONFLICTS(ret, file_name, lang) do { \
     if (strcmp(lang, "rs") == 0 && strcmp(file_name, "test") == 0) { \
@@ -46,7 +15,7 @@
         LANG_NAME_CONFLICT(lang, file_name); \
         ret = 1; \
     } \
-} while(0)
+} while (0)
 
 // don't sweat it CS graduates linear search in 5 elements array not that bad
 #define LANG_CHECK(ret, lang) { \
@@ -58,7 +27,6 @@
 }
 
 const char* const LANGS[LANGS_CAP] = {
-//   0     1     2      3     4     5      6      7     8     9
     "c", "rs", "cpp", "js", "go", "php", "pas", "kt", "py", "lua"
 };
 
@@ -116,7 +84,7 @@ int main(int argc, char** argv) {
 
     gen(&fptr, argv[1], dir, argv[2], &lang_idx, src);
 
-    ALL_SET
+    ALL_SET;
     fclose(fptr);
     return 0;
 }

@@ -3,6 +3,42 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#define CREATING(file_name, extens, content) \
+    fprintf(stdout, "<========================>\n"); \
+    fprintf(stdout, "Creating %s.%s:\n%s\n", file_name, extens, content); \
+
+#define USAGE do { \
+    fprintf(stdout, "usage: create <name> <language> <dir_name> <dir_path>\n"); \
+    fprintf(stdout, "for instance: create hello rs test .\n"); \
+} while (0)
+
+#define SHOW_SUPPORTED_LANGS(out) do { \
+    for (size_t i = 0; i < LANGS_CAP; ++i) { \
+        fprintf(out, "%s", LANGS[i]); \
+        if (i < LANGS_CAP - 1) { \
+            fprintf(out, ", "); \
+        } \
+    } fprintf(out, "\n"); \
+} while (0)
+
+#define LANG_NAME_CONFLICT(lang, file_name) fprintf(stderr, "ERROR: lang: %s, and name: %s is a conflict\n", lang, file_name);
+
+#define GET_USER_INPUT(buf, ret) do { \
+    do { \
+        buf = getchar(); \
+        if ('A' <= buf && buf <= 'Z') buf = ('a' + (buf - 'A')); \
+        if (buf != 'y' && buf != 'n') fprintf(stdout, "enter y or n "); \
+    } while (buf != 'y' && buf != 'n'); \
+    if (buf == 'y') ret = 1; else ret = 0; \
+    while (getchar() != '\n'); \
+} while (0)
+
+#define ALL_SET do { \
+    fprintf(stdout, "<======>\n"); \
+    fprintf(stdout, "All set!\n"); \
+    fprintf(stdout, "<======>\n"); \
+} while (0)
+
 #define TOML_BIN_CAP 64
 #define DIR_CAP      128
 #define FILE_CAP     256
