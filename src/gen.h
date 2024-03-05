@@ -53,10 +53,12 @@ void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* exte
     do { \
         buf = getchar(); \
         if ('A' <= buf && buf <= 'Z') buf = ('a' + (buf - 'A')); \
-        if (buf != 'y' && buf != 'n') fprintf(stdout, "enter y or n "); \
+        if (buf != 'y' && buf != 'n') { \
+            fprintf(stdout, "enter y or n "); \
+            while (getchar() != '\n'); \
+        } \
     } while (buf != 'y' && buf != 'n'); \
     if (buf == 'y') ret = 1; else ret = 0; \
-    while (getchar() != '\n'); \
 } while (0)
 
 #define ALL_SET do { \
