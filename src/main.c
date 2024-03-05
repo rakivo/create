@@ -36,8 +36,7 @@ int main(int argc, char** argv) {
         else if (strcmp(argv[1], "help") == 0 || strcmp(argv[1], "h") == 0) {
             USAGE;
             SHOW_SUPPORTED_LANGS(stdout);
-        }
-        else USAGE;
+        } else USAGE;
         return 1;
     }
 
@@ -55,21 +54,17 @@ int main(int argc, char** argv) {
     if (is_conflict != 0) return 1;
     fprintf(stdout, "Creating directory %s..\n", dir);
 
-    struct stat info;
     int src = 0;
-    if (lang_idx == 1) {
-        fprintf(stdout, "Create src directory for a %s file? [y/n] ", argv[1]);
+    struct stat info;
+    if (lang_idx == 1) { // asking only for Rust
+        fprintf(stdout, "Create src directory for a %s.%s file? [y/n] ", argv[1], argv[2]);
         char check; int ans;
         GET_USER_INPUT(check, ans);
         if (ans == 1) {
             src = 1;
             CREATE_DIRS(dir, info, 1);
-        } else {
-            CREATE_DIRS(dir, info, 0);
-        }
-    } else {
-        CREATE_DIRS(dir, info, 0);
-    }
+        } else CREATE_DIRS(dir, info, 0);
+    } else CREATE_DIRS(dir, info, 0);
 
     char file[FILE_CAP];
     // add '/' only if it is not already present at the end

@@ -1,12 +1,11 @@
 #include "gen.h"
 
-#define TOML_MOD_SAMPLE "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"%s.rs\""
-#define GO_MOD_SAMPLE   "module %s\n\ngo 1.22.0"
-
+// set mod. file, like go.mod, Cargo.toml & etc.
 #define SET_MOD(file, dir, content, src) \
     if (src == 1) snprintf(file, FILE_CAP, "%s/../%s", dir, content); \
     else snprintf(file, FILE_CAP, "%s/%s", dir, content);
 
+// set sample content to the main file
 #define SET_SAMPLE(file, file_name, sample, ...) do { \
     _Pragma("GCC diagnostic ignored \"-Wformat-extra-args\"") \
     _Pragma("GCC diagnostic ignored \"-Wunused-value\"") \
@@ -22,7 +21,7 @@ const char* const SAMPLES[SAMPLES_CAP] = {
     "<?php\necho \"hello, world\";\n?>",
     "program hello;\nbegin\n    writeln('hello, world');\nend.",
     "fun main() {\n    println(\"hello, world\")\n}",
-    "print(\"hello, world\");" // common code (for simple languages like python, lua, etc)
+    "print(\"hello, world\");" // common code (for languages like python, lua, etc)
 };
 
 void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx, int src) {
@@ -34,13 +33,14 @@ void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* exte
         fputs(SAMPLES[common_check], *fptr);
         return;
     }
+
     char file[FILE_CAP];
     char content[SAMPLE_CAP];
     if (rs_check == 0) {
         SET_MOD(file, dir, "Cargo.toml", src);
         if (src == 1) {
             char toml_bin[TOML_BIN_CAP];
-            snprintf(toml_bin, SAMPLE_CAP, "src/%s", file_name);
+            snprintf(toml_bin, TOML_BIN_CAP, "src/%s", file_name);
             SET_SAMPLE(content, file_name, TOML_MOD_SAMPLE, file_name, toml_bin);
         }
         else SET_SAMPLE(content, file_name, TOML_MOD_SAMPLE, file_name, file_name);

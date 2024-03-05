@@ -3,6 +3,32 @@
 #include <string.h>
 #include <sys/stat.h>
 
+// <================================================- CAPACITIES - ===============================================>
+
+#define TOML_BIN_CAP 64
+#define DIR_CAP      128
+#define FILE_CAP     256
+#define SAMPLE_CAP   512
+
+#define SAMPLES_CAP 9
+#define LANGS_CAP   10
+
+// <============================================== - DECLARATIONS - ==============================================>
+
+extern const char* const LANGS[LANGS_CAP];
+
+int create_dir_(char* dir_path);
+int create_dirs(char* dir_path, int src);
+
+void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx, int src);
+
+// <================================================= - SAMPLES - =================================================>
+
+#define TOML_MOD_SAMPLE "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"%s.rs\""
+#define GO_MOD_SAMPLE   "module %s\n\ngo 1.22.0"
+
+// <================================================= - LOGGING - =================================================>
+
 #define CREATING(file_name, extens, content) \
     fprintf(stdout, "<========================>\n"); \
     fprintf(stdout, "Creating %s.%s:\n%s\n", file_name, extens, content); \
@@ -38,18 +64,3 @@
     fprintf(stdout, "All set!\n"); \
     fprintf(stdout, "<======>\n"); \
 } while (0)
-
-#define TOML_BIN_CAP 64
-#define DIR_CAP      128
-#define FILE_CAP     256
-#define SAMPLE_CAP   512
-
-#define SAMPLES_CAP 9
-#define LANGS_CAP   10
-
-extern const char* const LANGS[LANGS_CAP];
-
-int create_dir_(char* dir_path);
-int create_dirs(char* dir_path, int src);
-
-void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx, int src);
