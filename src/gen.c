@@ -1,18 +1,21 @@
 #include "gen.h"
 
-#define TOML_MOD_SAMPLE "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"./%s.rs\""
+#define TOML_MOD_SAMPLE "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n\n[[bin]]\nname = \"%s\"\npath = \"%s.rs\""
 #define GO_MOD_SAMPLE   "module %s\n\ngo 1.22.0"
 
 #define CREATING(file_name, extens, content) \
     fprintf(stdout, "<========================>\n"); \
     fprintf(stdout, "Creating %s.%s:\n%s\n", file_name, extens, content); \
 
-#define SET_MOD(file, dir, content) snprintf(file, FILE_CAP, "%s/%s", dir, content)
+#define SET_MOD(file, dir, content, src) \
+    if (src == 1) snprintf(file, FILE_CAP, "%s/../%s", dir, content); \
+    else snprintf(file, FILE_CAP, "%s/%s", dir, content);
+
 #define SET_SAMPLE(file, file_name, sample, ...) do { \
-        _Pragma("GCC diagnostic ignored \"-Wformat-extra-args\"") \
-        _Pragma("GCC diagnostic ignored \"-Wunused-value\"") \
-        snprintf(file, FILE_CAP, sample, file_name, ##__VA_ARGS__); \
-    } while (0)
+    _Pragma("GCC diagnostic ignored \"-Wformat-extra-args\"") \
+    _Pragma("GCC diagnostic ignored \"-Wunused-value\"") \
+    snprintf(file, FILE_CAP, sample, file_name, ##__VA_ARGS__); \
+} while (0)
 
 const char* const SAMPLES[SAMPLES_CAP] = {
     "#include <stdio.h>\n\nint main(void) {\n    printf(\"hello, world\\n\");\n    return 0;\n}",
@@ -26,7 +29,7 @@ const char* const SAMPLES[SAMPLES_CAP] = {
     "print(\"hello, world\");" // common code (for simple languages like python, lua, etc)
 };
 
-void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx) {
+void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx, int src) {
     const int rs_check = strcmp(extens, "rs");
     const int go_check = strcmp(extens, "go");
     if (rs_check != 0 && go_check != 0) {
@@ -38,11 +41,16 @@ void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* exte
     char file[FILE_CAP];
     char content[SAMPLE_CAP];
     if (rs_check == 0) {
-        SET_MOD(file, dir, "Cargo.toml");
-        SET_SAMPLE(content, file_name, TOML_MOD_SAMPLE, file_name, file_name, file_name);
+        SET_MOD(file, dir, "Cargo.toml", src);
+        if (src == 1) {
+            char toml_bin[TOML_BIN_CAP];
+            snprintf(toml_bin, SAMPLE_CAP, "src/%s", file_name);
+            SET_SAMPLE(content, file_name, TOML_MOD_SAMPLE, file_name, toml_bin);
+        }
+        else SET_SAMPLE(content, file_name, TOML_MOD_SAMPLE, file_name, file_name);
         CREATING("Cargo", "toml", content);
     } else if (go_check == 0) {
-        SET_MOD(file, dir, "go.mod");
+        SET_MOD(file, dir, "go.mod", src);
         SET_SAMPLE(content, file_name, GO_MOD_SAMPLE, file_name);
         CREATING("go", "mod", content);
     } else {

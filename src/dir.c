@@ -2,7 +2,7 @@
 
 #include "gen.h"
 
-int create_dir_(const char* dir_path) {
+int create_dir_(char* dir_path) {
     if (mkdir(dir_path, 0777) == -1 && errno != EEXIST) {
         perror("ERROR");
         return 1;
@@ -10,7 +10,7 @@ int create_dir_(const char* dir_path) {
     return 0;
 }
 
-int create_dirs(const char* dir_path) {
+int create_dirs(char* dir_path, int src) {
     char curr_dir[DIR_CAP]; snprintf(curr_dir, DIR_CAP, "%s", dir_path);
 
     size_t n = strlen(curr_dir);
@@ -23,5 +23,6 @@ int create_dirs(const char* dir_path) {
         }
     }
     create_dir_(curr_dir);
+    if (src) create_dir_(strcat(dir_path, "src"));
     return 0;
 }
