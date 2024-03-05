@@ -1,5 +1,3 @@
-# Software is NOT finished! Do NOT have any expectations!
-
 ## Supported languages:
 - [Rust](https://github.com/rust-lang/rust)
 - [C](https://en.wikipedia.org/wiki/C_(programming_language))
@@ -32,7 +30,7 @@ $ ./addtopath.sh
 ```./create create <name> <language> <dir_name> <dir_path>```
 for instance: ```./create hello rs test .```
 
-### After present manipulations you can test that:
+### After that you can test that:
 ```shell
 $ cd test
 $ cargo run
