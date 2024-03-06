@@ -1,3 +1,5 @@
+## The "create" is tool that designed to generate sample projects, each with a single (or not only a single in the case of Rust / Go) file, containing simple code, that prints "hello, world".
+
 ## Supported languages:
 - [Rust](https://github.com/rust-lang/rust)
 - [C](https://en.wikipedia.org/wiki/C_(programming_language))

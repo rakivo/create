@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -Wextra -pedantic -std=c99
+CFLAGS = -g -O3 -Wall -Wextra -pedantic -std=c99
 SRC_DIR = ./src
 BUILD_DIR = .
 
