@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    gen(&fptr, argv[1], dir, argv[2], &lang_idx, src);
+    gen(&fptr, argv[1], dir, argv[2], argv[3], &lang_idx, src);
 
     ALL_SET;
     fclose(fptr);

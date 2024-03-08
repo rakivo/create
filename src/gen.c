@@ -6,10 +6,10 @@
     else snprintf(file, FILE_CAP, "%s/%s", dir, content);
 
 // set sample content to the main file
-#define SET_SAMPLE(file, file_name, sample, ...) do { \
+#define SET_SAMPLE(file, dir_name, sample, ...) do { \
     _Pragma("GCC diagnostic ignored \"-Wformat-extra-args\"") \
     _Pragma("GCC diagnostic ignored \"-Wunused-value\"") \
-    snprintf(file, FILE_CAP, sample, file_name, ##__VA_ARGS__); \
+    snprintf(file, FILE_CAP, sample, dir_name, ##__VA_ARGS__); \
 } while (0)
 
 const char* const SAMPLES[SAMPLES_CAP] = {
@@ -24,7 +24,7 @@ const char* const SAMPLES[SAMPLES_CAP] = {
     "print(\"hello, world\");" // common code (for languages like python, lua, etc)
 };
 
-void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const int* const idx, int src) {
+void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* extens, const char* dir_name, const int* const idx, int src) {
     const int rs_check = strcmp(extens, "rs");
     const int go_check = strcmp(extens, "go");
     if (rs_check != 0 && go_check != 0) {
@@ -41,13 +41,13 @@ void gen(FILE** fptr, const char* file_name, char dir[DIR_CAP], const char* exte
         if (src == 1) {
             char toml_bin[TOML_BIN_CAP];
             snprintf(toml_bin, TOML_BIN_CAP, "src/%s", file_name);
-            SET_SAMPLE(content, file_name, TOML_MOD_SAMPLE, file_name, toml_bin);
+            SET_SAMPLE(content, dir_name, TOML_MOD_SAMPLE, dir_name, toml_bin);
         }
-        else SET_SAMPLE(content, file_name, TOML_MOD_SAMPLE, file_name, file_name);
+        else SET_SAMPLE(content, dir_name, TOML_MOD_SAMPLE, file_name, file_name);
         CREATING("Cargo", "toml", content);
     } else if (go_check == 0) {
         SET_MOD(file, dir, "go.mod", src);
-        SET_SAMPLE(content, file_name, GO_MOD_SAMPLE, file_name);
+        SET_SAMPLE(content, file_name, GO_MOD_SAMPLE, dir_name);
         CREATING("go", "mod", content);
     } else {
         fprintf(stderr, "ERROR: Unknown language extension: %s in directory: %s\n", extens, dir);
